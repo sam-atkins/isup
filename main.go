@@ -12,9 +12,13 @@ import (
 
 func main() {
 	url := os.Args[1]
-	scrapedHTML := scrapeSite(url)
-	status := getStatus(scrapedHTML)
 
+	c := &Client{
+		siteURL: url,
+	}
+	scrapedHTML := c.GetRequest()
+
+	status := getStatus(scrapedHTML)
 	if status == "up" {
 		fmt.Printf("✅  %s is up\n", url)
 		return
@@ -27,8 +31,25 @@ func main() {
 	}
 }
 
-func scrapeSite(url string) []string {
-	fullURL := "https://isitup.org/" + url
+// Client struct, strings used to form a full URL
+type Client struct {
+	baseURL string
+	siteURL string
+}
+
+// BaseURL forms the default baseURL if none is provided
+func (c *Client) BaseURL() string {
+	if c.baseURL == "" {
+		return "https://isitup.org/"
+	}
+	return c.baseURL
+}
+
+// GetRequest makes a request to the site provided by the user and returns a slice of html
+// paragraphs
+func (c *Client) GetRequest() []string {
+	fullURL := c.BaseURL() + c.siteURL
+
 	response, err := http.Get(fullURL)
 	if err != nil {
 		print(err)
@@ -45,7 +66,6 @@ func scrapeSite(url string) []string {
 	}
 
 	results := make([]string, 1)
-
 	doc.Find("#container").Each(func(i int, s *goquery.Selection) {
 		para := s.Find("p").Text()
 		results = append(results, para)

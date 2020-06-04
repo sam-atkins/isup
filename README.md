@@ -2,7 +2,7 @@
 
 ![Tests](https://github.com/sam-atkins/isup/workflows/Tests/badge.svg)
 
-This is a reworking of [is-up-cli](https://github.com/sindresorhus/is-up-cli) written in Golang. It uses [isitup.org/](https://isitup.org/) under the hood.
+This is a reworking of [is-up-cli](https://github.com/sindresorhus/is-up-cli) written in Golang. It uses [isitup.org](https://isitup.org/) under the hood.
 
 - [isup](#isup)
   - [Install](#install)
